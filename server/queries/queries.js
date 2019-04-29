@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 const knex = require('../../knex');
-const path = require('path');
 
 // Get All
 const getAllUsers = ('/',(req,res,next) => {
@@ -16,9 +15,8 @@ const getAllUsers = ('/',(req,res,next) => {
     })
 })
 
-
+// Get One User
 const getOneUser = ('/:id',(req,res,next) => {
-    console.log('get one',req.body)
     let id = req.params.id
     knex('users')
     .where('id',id)
@@ -31,40 +29,39 @@ const getOneUser = ('/:id',(req,res,next) => {
     })
 })
 
+// Patch
+router.patch('/:id',(req,res,next) => {
+    let id = req.params.id
+    knex('users')
+    .where('id',id)
+    .update({
+        id:req.body.id,
+        name:req.body.name,
+        message:req.body.message
+    })
+    .then(data => {
+        res.send(data[0])
+    })
+    .catch(err => {
+        res.status(404).send(err)
+    })
+})
 
-// //Patch
-// router.patch('/:id',(req,res,next) => {
-//     let id = req.params.id
-//     knex('users')
-//     .where('id',id)
-//     .update({
-//         id:req.body.id,
-//         name:req.body.name,
-//         message:req.body.message
-//     })
-//     .then(data => {
-//         res.send(data[0])
-//     })
-//     .catch(err => {
-//         res.status(404).send(err)
-//     })
-// })
-
-// //Delete
-// router.delete('/:id',(req,res,next) => {
-//     let id = req.params.id;
-//     let body = req.body;
-//     knex('users')
-//     .where('id',id)
-//     .returning(['id','name','message'])
-//     .del()
-//     .then(data => {
-//         res.send(data[0])
-//     })
-//     .catch(err => {
-//         res.status(404).send(err)
-//     })
-// })
+//Delete
+router.delete('/:id',(req,res,next) => {
+    let id = req.params.id;
+    let body = req.body;
+    knex('users')
+    .where('id',id)
+    .returning(['id','name','message'])
+    .del()
+    .then(data => {
+        res.send(data[0])
+    })
+    .catch(err => {
+        res.status(404).send(err)
+    })
+})
 
 //error
 router.use((err, req, res, next) => {

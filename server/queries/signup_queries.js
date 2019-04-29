@@ -19,12 +19,9 @@ const signUpUser =('/',(req,res,next) => {
         const token = jwt.sign({
             id: user[0].id,
             email: user[0].email,
-        }, 'shhhhh');
-        var decoded = jwt.verify(token, 'shhhhh');
+        },'shhhhh');
         res.status(200).send({
-            id: user[0].id,
-            email: user[0].email,
-            //token:token
+            token:token
         })
     })
 })

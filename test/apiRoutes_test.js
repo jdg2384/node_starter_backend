@@ -1,5 +1,4 @@
 const request = require('supertest');
-//const queries = require('../server/queries/queries.js'); //reference to you app.js file
 const server = require('../server.js')
 
 describe('GET /api', function () {
@@ -18,12 +17,12 @@ describe('POST /signup', function () {
             .post('/signup')
             .set('Accept', 'application/json')
             .send({
-                email: 'schroder.brent@gmail.com',
-                password: 'supdogmex'
+                email: 'email@gmail.com',
+                password: 'password'
             })
             .expect(200, {
                 id: 1,
-                email: 'schroder.brent@gmail.com'
+                email: 'email@gmail.com'
             }, done)
     });
 });
