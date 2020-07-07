@@ -1,4 +1,5 @@
 const knex = require('../../knex');
+
 // Get All Users
 const getUsers = async id => 
     await knex
@@ -14,14 +15,24 @@ const getUser = async id =>
     .from('users')
     .then(data => data[0]);
 
+// Update User
+const updateUser = async req => 
+    await knex('users')
+    .where('id',req.params.id)
+    .update({
+        email: req.body.email,
+    })
+    .returning(['id','email'])
 
-
-
-
-
-
+const deleteUser = async id =>
+    knex('users')
+    .where('id',id)
+    .returning(['id','email'])
+    .del()
 
 module.exports = {
     getUsers,
-    getUser
+    getUser,
+    updateUser,
+    deleteUser
 }

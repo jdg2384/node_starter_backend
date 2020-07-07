@@ -1,7 +1,11 @@
-const router = require('express').Router();g
-const { getAllUsers, getOneUser } = require('../queries/user_queries.js')
+const router = require('express').Router();
+const { getAllUsers, getOneUser, patchUser, deleteUserFunc } = require('../queries/user_queries.js')
 
 router.get('/', getAllUsers)
-router.get('/:id', getOneUser)
+
+router
+    .get('/:id', getOneUser)
+    .patch('/:id', patchUser)
+    .delete('/:id', deleteUserFunc)
 
 module.exports = router

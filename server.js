@@ -13,7 +13,7 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-app.use('/api', require('./src/routes/users.js'));
+app.use('/users', require('./src/routes/users.js'));
 app.use('/signup', require('./src/routes/signup.js'));
 
 

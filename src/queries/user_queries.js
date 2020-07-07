@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const knex = require('../../knex');
 const _ = require('lodash');
-const { getUsers, getUser } = require('../dao/users')
+const { getUsers, getUser, updateUser, deleteUser } = require('../dao/users')
 
 // Get All
 const getAllUsers = async (req,res,next) => {
@@ -36,38 +36,34 @@ const getOneUser = async (req,res,next) => {
 }
 
 // Patch
-router.patch('/:id',(req,res,next) => {
-    let id = req.params.id
-    knex('users')
-    .where('id',id)
-    .update({
-        id:req.body.id,
-        name:req.body.name,
-        message:req.body.message
-    })
-    .then(data => {
-        res.send(data[0])
-    })
-    .catch(err => {
-        res.status(404).send(err)
-    })
-})
+const patchUser = async (req,res,next) => {
+    try {
+        const data = await updateUser(req)
+        if (!_.isEmpty(data)) {
+            res.send(data)
+        } else {
+            res.status(404).send({ message: 'No data to return' })
+        }
+    } catch (err) {
+        console.error('err', err);
+        res.status(500).send({ message: `Internal Server ${err}` });
+    }
+}
 
 //Delete
-router.delete('/:id',(req,res,next) => {
-    let id = req.params.id;
-    let body = req.body;
-    knex('users')
-    .where('id',id)
-    .returning(['id','name','message'])
-    .del()
-    .then(data => {
-        res.send(data[0])
-    })
-    .catch(err => {
-        res.status(404).send(err)
-    })
-})
+const deleteUserFunc =  async (req,res,next) => {
+    try {
+        const data = await deleteUser(req.params.id)
+        if (!_.isEmpty(data)) {
+            res.send(data)
+        } else {
+            res.status(404).send({ message: 'No data to return' })
+        }
+    } catch (err) {
+        console.error('err', err);
+        res.status(500).send({ message: `Internal Server ${err}` });
+    }
+}
 
 //error
 router.use((err, req, res, next) => {
@@ -82,5 +78,7 @@ router.use((req, res, next) => {
 
 module.exports = {
     getAllUsers,
-    getOneUser
+    getOneUser,
+    patchUser,
+    deleteUserFunc
   }

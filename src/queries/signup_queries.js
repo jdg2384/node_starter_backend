@@ -9,32 +9,34 @@ const bcrypt = require('bcrypt');
 // Post signup Route
 const signUpUser = (req,res,next) => {
     // var decoded = jwt.verify(token, process.env.TOKEN_SECRET)
-    var salt = bcrypt.genSaltSync(4)
-    var hash = bcrypt.hashSync(req.body.password, salt);
-    const token = jwt.sign({
-        email: 'gmail@gmail.com',
-    }, process.env.TOKEN_SECRET, { expiresIn: 20 });
-    try {
-        console.log("decoded", decoded)
-      } catch(err) {
-        res.send([err.name])
-      }
     // var salt = bcrypt.genSaltSync(4)
     // var hash = bcrypt.hashSync(req.body.password, salt);
-    // knex('users').insert({
-    //     email:req.body.email,
-    //     password:hash,
-    //     salt:salt
-    // },'*') 
-    // .then(user=>{
-    //     const token = jwt.sign({
-    //         id: user[0].id,
-    //         email: user[0].email,
-    //     },'shhhhh');
-    //     res.status(200).send({
-    //         token:token
-    //     })
-    // })
+    // const token = jwt.sign({
+    //     email: 'gmail@gmail.com',
+    // }, process.env.TOKEN_SECRET, { expiresIn: 20 });
+    // try {
+    //     console.log("decoded", decoded)
+    //   } catch(err) {
+    //     res.send([err.name])
+    //   }
+    var salt = bcrypt.genSaltSync(4)
+    var hash = bcrypt.hashSync(req.body.password, salt);
+    knex('users').insert({
+        email:req.body.email,
+        password:hash,
+        salt:salt
+    },'*') 
+    .then(user=>{
+        const token = jwt.sign({
+            id: user[0].id,
+            email: user[0].email,
+        },'shhhhh');
+        res.status(200).send({
+            token:token,
+            id: user[0].id,
+            email: user[0].email,
+        })
+    })
 }
 
 // Error
