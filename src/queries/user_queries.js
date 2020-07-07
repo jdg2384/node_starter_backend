@@ -2,32 +2,38 @@
 const express = require('express');
 const router = express.Router();
 const knex = require('../../knex');
+const _ = require('lodash');
+const { getUsers, getUser } = require('../dao/users')
 
 // Get All
-const getAllUsers = ('/',(req,res,next) => {
-    knex('users')
-    .select('id','email')
-    .then(data => {
-        res.status(200).send(data)
-    })
-    .catch(err => {
-        res.status(404).send(err)
-    })
-})
+const getAllUsers = async (req,res,next) => {
+    try {
+        const data = await getUsers()
+        if (!_.isEmpty(data)) {
+            res.send(data)
+        } else {
+            res.status(404).send({ message: 'No data to return' })
+        }
+    } catch (err) {
+        console.error('err', err);
+        res.status(500).send({ message: `Internal Server ${err}` });
+    }
+}
 
 // Get One User
-const getOneUser = ('/:id',(req,res,next) => {
-    let id = req.params.id
-    knex('users')
-    .where('id',id)
-    .select('id','email')
-    .then(data => {
-        res.send(data[0])
-    })
-    .catch(err => {
-        res.status(404).send(err)
-    })
-})
+const getOneUser = async (req,res,next) => {
+    try {
+        const data = await getUser(req.params.id)
+        if (!_.isEmpty(data)) {
+            res.send(data)
+        } else {
+            res.status(404).send({ message: 'No data to return' })
+        }
+    } catch (err) {
+        console.error('err', err);
+        res.status(500).send({ message: `Internal Server ${err}` });
+    }
+}
 
 // Patch
 router.patch('/:id',(req,res,next) => {

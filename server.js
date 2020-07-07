@@ -2,7 +2,10 @@ const express =require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const port = process.env.PORT || 3000
+const dotenv = require('dotenv');
+dotenv.config();
+
+const port = process.env.PORT 
 
 app.use(cors())
 app.use(express.static('public'))
@@ -10,11 +13,8 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 
-const routes = require('./server/routes/routes.js');
-const signup = require('./server/routes/signup.js');
-
-app.use('/api', routes);
-app.use('/signup', signup);
+app.use('/api', require('./src/routes/users.js'));
+app.use('/signup', require('./src/routes/signup.js'));
 
 
 //Error
