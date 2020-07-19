@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const server = require('../server.js')
+const server = require('../server.js');
 const { expect } = require('chai');
 const request = require('supertest');
 

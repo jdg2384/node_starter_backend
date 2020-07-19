@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --require ./test/setup.js --exit"
+    "test": "mocha --require ./test/setup.js --exit",
+    "format": "prettier --write 'src' 'test'"
   },
   "keywords": [],
   "author": "",

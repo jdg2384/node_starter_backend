@@ -1,8 +1,6 @@
 const router = require('express').Router();
-const {signUpUser} = require('../queries/signup_queries.js')
+const { signUpUser } = require('../queries/signup.js');
 
+router.post('/', signUpUser);
 
-router
-    .post('/', signUpUser)
-
-module.exports = router
+module.exports = router;
